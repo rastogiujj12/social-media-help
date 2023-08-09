@@ -191,6 +191,7 @@ export default {
             setTimeout(()=>this.$store.dispatch('setIsLoading',{value:false}), 2000)
             let fileName = uri.split("/").pop()
             saveAs(uri, fileName)
+            
             if(!this.isLoggedIn){
                 let route = this.$router.resolve('/instagram');
                 window.open(route.href, '_blank');

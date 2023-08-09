@@ -1,7 +1,22 @@
 <template>
     <b-container>
-        <div class="header">Some title with episode name</div>
-
+        <div v-if="!editTitle" class="header">{{title}}
+            <svg-icon
+                class="action-icon"
+                v-if="!!user"
+                type="mdi"
+                @click.native="editTitleButton()"
+                :path="editIcon"
+            ></svg-icon>
+        </div>
+        <div v-else class="header">
+            <b-form-input
+                id="title-input"
+                v-model="title"
+                v-on:keyup.enter="saveTitle"
+                required
+            ></b-form-input>
+        </div>
         <!-- <div v-for="(section, index) in sections" :key="index" class="columns">
             {{ section.type }}
         </div> -->
@@ -220,6 +235,10 @@ import {
     BToast,
     BvToast,
 } from "bootstrap-vue";
+import SvgIcon from "@jamescoyle/vue-icon";
+import {
+    mdiPencil,
+} from "@mdi/js";
 import Facebook from "../Facebook/Facebook.vue";
 import Instagram from "../Instagram/Instagram.vue";
 import Axios from "../../Services/AxiosService";
@@ -238,6 +257,7 @@ export default {
         BButton,
         Facebook,
         Instagram,
+        SvgIcon
     },
     // directives:{
     //     "b-toast":VBToast
@@ -250,6 +270,10 @@ export default {
             postType: "",
             currSecIndex: "",
             selectedSection: null,
+            title:"Episode Title", 
+            editTitle:false,
+
+            editIcon: mdiPencil,
 
             sections: [],
             sectionOptions: [
@@ -350,7 +374,7 @@ export default {
                     this.$store.dispatch("setIsLoading", { value: true });
                     Axios.post("/savepage", {
                         id: this.id,
-                        title: "abcd",
+                        title: this.title,
                         posts: JSON.stringify(this.sections),
                     }).then(({ data, error }) => {
                         this.$store.dispatch("setIsLoading", { value: false });
@@ -444,6 +468,12 @@ export default {
                     this.sections[section].posts.splice(index, 1);
                 }
             })
+        },
+        editTitleButton(){
+            this.editTitle = true;
+        },
+        saveTitle(){
+            this.editTitle = false;
         }
     },
     watch: {
@@ -471,7 +501,7 @@ export default {
 <style scoped>
 .header {
     text-align: center;
-    margin-bottom: 20px;
+    margin: 20px 0;
     font-size: 30px;
 }
 .empty {
@@ -503,5 +533,10 @@ export default {
 }
 .buttons-row {
     margin-bottom: 20px;
+}
+.action-icon {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 5px;
+    border: 1px dotted black;
 }
 </style>
