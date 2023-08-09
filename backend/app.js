@@ -11,8 +11,8 @@ var handlebars = require('express-handlebars');
 // and documentation.
 
 app.init({
-	'name': 'multaview',
-	'brand': 'multaview',
+	'name': 'collabroflow',
+	'brand': 'collabroflow',
 
 	'less': 'public',
 	'static': 'public',
@@ -59,8 +59,8 @@ app.set('cors allow headers', true);
 // Configure the navigation bar in Keystone's Admin UI
 app.set('nav', {
 	users: 'users',
-	videos: ['videos','director-cuts'],
-	subscriptions: ['licenses', 'payments']
+	// videos: ['videos','director-cuts'],
+	// subscriptions: ['licenses', 'payments']
 });
 
 // //cors

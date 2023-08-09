@@ -22,6 +22,7 @@ var keystone = require('./../ks');
 var middleware = require('./middleware');
 var importRoutes = keystone.importer(__dirname);
 var cors = require('cors')
+const path = require('path');
 
 
 // Common Middleware
@@ -54,7 +55,7 @@ exports = module.exports = function (app) {
 		res.sendStatus(200);
 	})
 
-	app.get('/', (req, res)=>res.redirect("/admin"));
+	// app.get('/', (req, res)=>res.redirect("/admin"));
 	// app.get('/video',   routes.services.videos.get);
 	// app.get('/getVideosList',   routes.services.videos.getVideosList);
 	app.post('/login',  routes.services.auth.login);
@@ -67,7 +68,13 @@ exports = module.exports = function (app) {
 	app.get('/autologin', middleware.isLoggedIn, routes.services.auth.autoLogin );
 	app.post("/savepage", middleware.isLoggedIn, routes.services.pages.save )
 	app.get("/page",     routes.services.pages.getPage )
-
+	
+	app.get('/*', (req, res) => {
+        // console.log('keystone', keystone);
+		// console.log('inside /* routing');
+        // console.log('path',path.join(__dirname,'..','public','index.html'));
+        res.sendFile(path.join(__dirname,'..','public','index.html'));
+    });
 	// app.post('/videoBySlug',  middleware.isLoggedIn, routes.services.videos.getBySlug);
 	// app.post('/directorCuts', middleware.isLoggedIn, routes.services.videos.directorCuts);
 
