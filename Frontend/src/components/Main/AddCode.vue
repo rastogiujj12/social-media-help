@@ -361,7 +361,7 @@ export default {
             this.currSecIndex = null;
         },
         saveAndShare() {
-            Swal.fire({
+            this.$swal.fire({
                 title: 'Confirm Save?',
                 text: "You won't be able to revert this!",
                 icon: 'info',

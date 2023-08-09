@@ -9,7 +9,7 @@
 
 exports.create = {
 	User: [
-		{ 'name.first': 'Admin', 'name.last': 'User', 'email': 'admin@mail.com', 'password': 'admin', 'isAdmin': true, 'subdomain':'multivideotest.s3-website-us-west-1.amazonaws.com' },
+		{ 'name.first': 'Admin', 'name.last': 'User', 'email': 'admin@mail.com', 'password': 'admin', 'isAdmin': true },
 	],
 };
 
