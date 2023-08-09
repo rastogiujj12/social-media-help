@@ -201,6 +201,12 @@ export default {
         postIndex: Number
     },
     methods:{
+        copyText(text) {
+            navigator.clipboard.writeText(text);
+            this.$bvToast.toast(`Text copied`, {
+                autoHideDelay: 5000,
+            });
+        },
         downloadURI(uri) {
             this.$store.dispatch('setIsLoading',{value:true})
             setTimeout(()=>this.$store.dispatch('setIsLoading',{value:false}), 2000)
