@@ -4,7 +4,7 @@ console.log("axios service", this)
 
 
 // const endpoint = ""
-const endpoint = "https://app.collabroflow.com"
+const endpoint = "https://api.collabroflow.com"
 
 let headers = {
     Authorization:''
