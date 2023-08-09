@@ -92,7 +92,6 @@
         <b-modal id="addPost" title="Add new post">
             <b-form id="addPostForm" @submit.stop.prevent="handleAddPost">
                 <b-form-group
-                    v-if="postType != 'Instagram'"
                     label="Text"
                     label-for="text-input"
                 >
@@ -174,7 +173,7 @@
 
         <b-modal id="editPost" title="Edit post">
             <b-form id="editPostForm" @submit.stop.prevent="editPostSave">
-                <b-form-group v-if="postType != 'Instagram'" label="Text" label-for="text-input">
+                <b-form-group label="Text" label-for="text-input">
                     <b-form-input
                         id="text-input"
                         v-model="editPost.text"
@@ -294,6 +293,7 @@ export default {
                 video: null,
             },
             instagramPosts: {
+                text: null,
                 image: null,
                 video: null,
             },
@@ -345,6 +345,7 @@ export default {
                 temp.video = this.video;
             } else if (this.postType == "Instagram") {
                 temp = JSON.parse(JSON.stringify(this.instagramPosts));
+                temp.text = this.text;
                 temp.image = this.image;
                 temp.video = this.video;
             }

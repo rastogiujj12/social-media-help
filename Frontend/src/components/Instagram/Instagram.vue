@@ -148,15 +148,29 @@
             </div>
         </div>
         <div class="instagram-post-like-count">1,523 likes</div>
+        <div  class="instagram-text-container">
+            <span>
+                <span class="instagram-post-like-count">John Doe</span>
+                {{ post.text }}</span>
+            <svg-icon
+                type="mdi"
+                class="action-icon text-copy"
+                @click.native="copyText(post.text)"
+                :path="textCopy"
+                v-b-tooltip.hover
+                title="Copy Text"
+            ></svg-icon>
+        </div>
     </div>
 </template>
 
 <script>
 import SvgIcon from "@jamescoyle/vue-icon";
-import {e,
+import {
     mdiDownloadOutline,
     mdiPencil,
-    mdiTrashCanOutline
+    mdiTrashCanOutline,
+    mdiContentCopy
 } from "@mdi/js";
 import { 
     BTooltip,
@@ -174,7 +188,8 @@ export default {
         return {
             mediaDownload: mdiDownloadOutline,
             editIcon: mdiPencil,
-            deleteIcon:mdiTrashCanOutline
+            deleteIcon:mdiTrashCanOutline,
+            textCopy: mdiContentCopy,
         };
     },
     props: {
@@ -289,5 +304,13 @@ export default {
 .delete-icon{
     color: white;
     background: red;
+}
+.instagram-text-container{
+    position: relative;
+}
+.text-copy{
+    position: absolute;
+    right: 0;
+    top: -10px;
 }
 </style>

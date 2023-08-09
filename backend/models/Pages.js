@@ -1,7 +1,4 @@
 var keystone = require('./../ks');
-var Types = keystone.Field.Types;
-let licenses = keystone.list('License').model;
-const moment = require('moment');
 
 /**
  * Page Model
