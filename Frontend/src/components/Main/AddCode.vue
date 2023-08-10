@@ -58,7 +58,7 @@
                 </div>
             </b-col>
 
-            <b-col lg="6" cols="12">
+            <b-col v-if="!!user" lg="6" cols="12">
                 <div class="empty" @click="addPost(section.name, sectionIndex)">
                     Add Post
                 </div>
@@ -86,7 +86,17 @@
             </b-col>
         </b-row>
         <b-row v-if="shareUrl" class="pb-3">
-            <b-form-input id="share-url" v-model="shareUrl"></b-form-input>
+            <div class="share-row">
+                <b-form-input id="share-url" v-model="shareUrl"></b-form-input>
+                <svg-icon
+                    type="mdi"
+                    class="action-icon text-copy"
+                    @click.native="copyText(shareUrl)"
+                    :path="textCopy"
+                    v-b-tooltip.hover
+                    title="Copy Text"
+                ></svg-icon>
+            </div>
         </b-row>
 
         <b-modal id="addPost" title="Add new post">
@@ -237,6 +247,7 @@ import {
 import SvgIcon from "@jamescoyle/vue-icon";
 import {
     mdiPencil,
+    mdiContentCopy
 } from "@mdi/js";
 import Facebook from "../Facebook/Facebook.vue";
 import Instagram from "../Instagram/Instagram.vue";
@@ -303,7 +314,9 @@ export default {
             editSection: null,
             editPost: null,
 
-            editPost:{}
+            editPost:{},
+
+            textCopy: mdiContentCopy,
         };
     },
     created() {
@@ -405,7 +418,23 @@ export default {
             Axios.get(`/page?url=${url}`).then(({ data, error }) => {
                 this.$store.dispatch("setIsLoading", { value: false });
                 if (data) {
+                    this.title = data.title
                     this.sections = JSON.parse(data.posts);
+                    this.id = data._id
+                    this.shareUrl = `${window.location.hostname}/?page=${data._id}`;
+
+                    this.sectionOptions.forEach(option=>{
+                        option.isAdded = false;
+                    })
+
+                    this.sectionOptions.forEach(option=>{
+                        this.sections.forEach(section=>{
+                            if(option.name==section.name){
+                                option.isAdded = true;
+                            }
+                        })
+                    })
+
                 } else {
                     this.$bvToast.toast(`Some error occured`, {
                         autoHideDelay: 5000,
@@ -475,7 +504,13 @@ export default {
         },
         saveTitle(){
             this.editTitle = false;
-        }
+        },
+        copyText(text) {
+            navigator.clipboard.writeText(text);
+            this.$bvToast.toast(`Text copied`, {
+                autoHideDelay: 5000,
+            });
+        },
     },
     watch: {
         video() {
@@ -539,5 +574,12 @@ export default {
     background: rgba(255, 255, 255, 0.7);
     border-radius: 5px;
     border: 1px dotted black;
+}
+.share-row{
+    display: flex;
+    width:100%
+}
+.share-row svg{
+    margin: 5px
 }
 </style>

@@ -1,101 +1,105 @@
 <template>
-    <div class="facebook-post">
-        <div class="facebook-heading">
-            <img src="@/assets/user-profile.png" />
-            <div>
-                <div class="facebook-heading-name">John Doe</div>
-                <div class="facebook-heading-time">19h</div>
+    <div class="post">
+        <div class="facebook-post">
+            <div class="facebook-heading">
+                <img src="@/assets/user-profile.png" />
+                <div>
+                    <div class="facebook-heading-name">John Doe</div>
+                    <div class="facebook-heading-time">19h</div>
+                </div>
+                <div class="edit-icons">
+                    <svg-icon
+                        class="action-icon"
+                        v-if="isLoggedIn"
+                        type="mdi"
+                        @click.native="editPost()"
+                        :path="editIcon"
+                        v-b-tooltip.hover
+                        title="Edit"
+                    ></svg-icon>
+                    <svg-icon
+                        class="delete-icon action-icon"
+                        v-if="isLoggedIn"
+                        type="mdi"
+                        @click.native="deletePost()"
+                        :path="deleteIcon"
+                        v-b-tooltip.hover
+                        title="Delete"
+                    ></svg-icon>
+                </div>
             </div>
-            <div class="edit-icons">
-                <svg-icon
-                    class="action-icon"
-                    v-if="isLoggedIn"
-                    type="mdi"
-                    @click.native="editPost()"
-                    :path="editIcon"
-                    v-b-tooltip.hover
-                    title="Edit"
-                ></svg-icon>
-                <svg-icon
-                    class="delete-icon action-icon"
-                    v-if="isLoggedIn"
-                    type="mdi"
-                    @click.native="deletePost()"
-                    :path="deleteIcon"
-                    v-b-tooltip.hover
-                    title="Delete"
-                ></svg-icon>
+            <div class="facebook-body">
+                <div v-if="post.text" class="facebook-body-text">
+                    {{ post.text }}
+                    <!-- <svg-icon
+                        type="mdi"
+                        class="action-icon"
+                        @click.native="copyText(post.text)"
+                        :path="textCopy"
+                        v-b-tooltip.hover
+                        title="Copy Text"
+                    ></svg-icon> -->
+                </div>
+                <div v-if="post.image" class="facebook-body-image">
+                    <img :src="post.image" />
+                    <!-- <svg-icon
+                        type="mdi"
+                        class="action-icon"
+                        :path="mediaDownload"
+                        v-b-tooltip.hover
+                        @click.native="downloadURI(post.image)"
+                        title="Download Image"
+                    ></svg-icon> -->
+                </div>
+                <div v-else-if="post.video" class="facebook-body-image">
+                    <video :src="post.video" controls type="video/mp4" playsinline/>
+                    <!-- <svg-icon
+                        type="mdi"
+                        class="action-icon"
+                        :path="mediaDownload"
+                        v-b-tooltip.hover
+                        @click.native="downloadURI(post.video)"
+                        title="Download Video"
+                    ></svg-icon> -->
+                </div>
             </div>
-        </div>
-        <div class="facebook-body">
-            <div v-if="post.text" class="facebook-body-text">
-                {{ post.text }}
-                <svg-icon
-                    type="mdi"
-                    class="action-icon"
-                    @click.native="copyText(post.text)"
-                    :path="textCopy"
-                    v-b-tooltip.hover
-                    title="Copy Text"
-                ></svg-icon>
+            <div class="facebook-footer-1">
+                <div class="facebook-like-number">
+                    <img src="@/assets/facebook-like.svg" />
+                    <img src="@/assets/facebook-heart.svg" />
+                    <div class="facebook-like-count">634</div>
+                </div>
+                <div class="facebook-comment-number">
+                    <div class="facebook-comment-number-container">
+                        <div class="facebook-comment-count">201</div>
+                        <svg-icon type="mdi" :path="comment"></svg-icon>
+                    </div>
+                    <div class="facebook-comment-number-container">
+                        <div class="facebook-comment-count">23</div>
+                        <svg-icon type="mdi" :path="share"></svg-icon>
+                    </div>
+                </div>
             </div>
-            <div v-if="post.image" class="facebook-body-image">
-                <img :src="post.image" />
-                <svg-icon
-                    type="mdi"
-                    class="action-icon"
-                    :path="mediaDownload"
-                    v-b-tooltip.hover
-                    @click.native="downloadURI(post.image)"
-                    title="Download Image"
-                ></svg-icon>
-            </div>
-            <div v-else-if="post.video" class="facebook-body-image">
-                <video :src="post.video" controls type="video/mp4" />
-                <svg-icon
-                    type="mdi"
-                    class="action-icon"
-                    :path="mediaDownload"
-                    v-b-tooltip.hover
-                    @click.native="downloadURI(post.video)"
-                    title="Download Video"
-                ></svg-icon>
-            </div>
-        </div>
-        <div class="facebook-footer-1">
-            <div class="facebook-like-number">
-                <img src="@/assets/facebook-like.svg" />
-                <img src="@/assets/facebook-heart.svg" />
-                <div class="facebook-like-count">634</div>
-            </div>
-            <div class="facebook-comment-number">
-                <div class="facebook-comment-number-container">
-                    <div class="facebook-comment-count">201</div>
+
+            <div class="facebook-footer-2">
+                <div class="facebook-footer-2-container">
+                    <svg-icon type="mdi" :path="like"></svg-icon>
+                    <div class="facebook-footer-2-wrapper">Like</div>
+                </div>
+                <div class="facebook-footer-2-container">
                     <svg-icon type="mdi" :path="comment"></svg-icon>
+                    <div class="facebook-footer-2-wrapper">Comment</div>
                 </div>
-                <div class="facebook-comment-number-container">
-                    <div class="facebook-comment-count">23</div>
+                <div class="facebook-footer-2-container">
                     <svg-icon type="mdi" :path="share"></svg-icon>
+                    <div class="facebook-footer-2-wrapper">Share</div>
                 </div>
-            </div>
+            </div>        
         </div>
-
-        <div class="facebook-footer-2">
-            <div class="facebook-footer-2-container">
-                <svg-icon type="mdi" :path="like"></svg-icon>
-                <div class="facebook-footer-2-wrapper">Like</div>
-            </div>
-            <div class="facebook-footer-2-container">
-                <svg-icon type="mdi" :path="comment"></svg-icon>
-                <div class="facebook-footer-2-wrapper">Comment</div>
-            </div>
-            <div class="facebook-footer-2-container">
-                <svg-icon type="mdi" :path="share"></svg-icon>
-                <div class="facebook-footer-2-wrapper">Share</div>
-            </div>
+        <div class="action-buttons">
+            <b-button variant="success" class="btn primary" @click="copyAndDownloadMedia()">Copy Text & Download</b-button>
+            <b-button href="https://facebook.com" target="_blank" variant="success" class="btn facebook-style">Redirect to Facebook</b-button>
         </div>
-
-       
     </div>
 </template>
 
@@ -117,7 +121,8 @@ import {
     BModal,
     BFormGroup,
     BFormInput,
-    BForm
+    BForm,
+    BButton
 } from "bootstrap-vue";
 import { saveAs } from "file-saver";
 export default {
@@ -127,7 +132,8 @@ export default {
         BModal,
         BFormGroup,
         BFormInput,
-        BForm
+        BForm,
+        BButton
     },
     directives: {
         "b-tooltip": VBTooltip,
@@ -156,9 +162,14 @@ export default {
 
     },
     methods: {
+        copyAndDownloadMedia(){
+            this.copyText(this.post.text)
+            if(this.post.image) this.downloadURI(this.post.image)
+            else this.downloadURI(this.post.video)
+        },
         copyText(text) {
             navigator.clipboard.writeText(text);
-            this.$bvToast.toast(`Text copied`, {
+            this.$bvToast.toast(`Text copied Preparing Media download`, {
                 autoHideDelay: 5000,
             });
         },
@@ -191,7 +202,6 @@ export default {
     /* width: 680px; */
     border-radius: 10px;
     background: white;
-    margin-bottom: 20px;
 }
 facebook-post::backdrop {
     background-color: salmon;
@@ -230,7 +240,7 @@ facebook-post::backdrop {
     cursor: pointer;
 }
 .facebook-body-image {
-    max-height: 500px;
+    /* max-height: 500px; */
     overflow: hidden;
 }
 .facebook-body img {
@@ -300,5 +310,16 @@ facebook-post::backdrop {
 .delete-icon{
     color: white;
     background: red;
+}
+.action-buttons{
+    margin-top:20px;
+    display:flex;
+    justify-content: space-evenly;
+}
+.facebook-style{
+    background: #3b5998;
+}
+.post{
+    margin-bottom:20px;
 }
 </style>

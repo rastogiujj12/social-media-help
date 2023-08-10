@@ -6,20 +6,19 @@ const save = async (req, res) =>{
     const { id, title, posts } = req.body;
 
     // console.log("title", title, "posts", posts)
-    let page = {}
+    let result = null
     if(id){
-        page = page.findOne({_id:id})
-        page.title = title
-        page.posts = posts
+        await Page.update({_id:id}, {title, posts})
+        result = await Page.findOne({_id:id});
     }
     else {
         page = new Page({
             title,
             posts
         })
+        result = await page.save()
     }
 
-    let result = await page.save()
     res.send({data:result})
 }
 
