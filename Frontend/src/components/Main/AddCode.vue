@@ -279,7 +279,7 @@ export default {
             video: "",
             postType: "",
             currSecIndex: "",
-            selectedSection: null,
+            selectedSection: 0,
             title:"Episode Title", 
             editTitle:false,
 
@@ -290,7 +290,7 @@ export default {
                 {
                     id:0,
                     name:"Please select an option",
-                    isAdded:true,
+                    isAdded:false,
                 },
                 {
                     id: 1,
@@ -343,13 +343,14 @@ export default {
         },
         handleAddSection() {
             // console.log("here?", this.selectedSection)
+            if(!this.selectedSection) return;
             let section = this.sectionOptions[this.selectedSection];
             this.sections.push({
                 name: section.name,
                 posts: [],
             });
             section.isAdded = true;
-            this.selectedSection = null;
+            this.selectedSection = 0;
             this.$bvModal.hide("addSection");
         },
         handleAddPost() {
