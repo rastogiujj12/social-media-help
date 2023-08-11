@@ -172,7 +172,7 @@
             <template #modal-footer="{ cancel }">
                 <!-- <b-btn @click="cancel">Cancel</b-btn> -->
                 <!-- <b-btn variant="primary" type="submit" form="my-form">OK</b-btn> -->
-                <button class="btn btn-danger" @click="cancel" form="form">
+                <button class="btn btn-danger" @click="cancel">
                     Cancel
                 </button>
                 <button type="submit" class="btn btn-primary" form="form">
@@ -288,12 +288,17 @@ export default {
             sections: [],
             sectionOptions: [
                 {
-                    id: 0,
+                    id:0,
+                    name:"Please select an option",
+                    isAdded:true,
+                },
+                {
+                    id: 1,
                     name: "Facebook",
                     isAdded: false,
                 },
                 {
-                    id: 1,
+                    id: 2,
                     name: "Instagram",
                     isAdded: false, 
                 },
