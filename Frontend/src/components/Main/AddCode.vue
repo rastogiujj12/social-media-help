@@ -295,7 +295,7 @@ export default {
                 {
                     id: 1,
                     name: "Instagram",
-                    isAdded: false,
+                    isAdded: false, 
                 },
             ],
             facebookPosts: {
@@ -328,14 +328,12 @@ export default {
             // console.log("section", section);
             this.currSecIndex = index;
             this.postType = section;
-            this.formType = "addPostForm";
             this.$bvModal.show("addPost");
         },
         cancel() {
             console.log("cancelled");
         },
         addSection() {
-            this.formType = "addSectionForm";
             this.$bvModal.show("addSection");
         },
         handleAddSection() {
@@ -370,7 +368,6 @@ export default {
             this.text = null;
             this.video = null;
             this.image = null;
-            this.formType = null;
             this.postType = null;
             this.currSecIndex = null;
         },

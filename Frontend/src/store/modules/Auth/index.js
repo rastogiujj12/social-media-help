@@ -64,7 +64,9 @@ const actions = {
     // },
 
     login({ commit, dispatch }, { email, password }) {
+        dispatch('setIsLoading',{value:true})
         AxiosService.post('/login', { email, password }).then(({ token, userData, error }) => {
+            dispatch('setIsLoading',{value:false})
             if (token) {
                 //do something
                 localStorage.setItem("Authorization", token);
