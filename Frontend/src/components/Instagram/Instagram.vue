@@ -165,7 +165,7 @@
         </div>
         <div class="action-buttons">
             <b-button variant="success" class="btn primary" @click="copyAndDownloadMedia()">Copy Text & Download</b-button>
-            <b-button href="https://instagram.com" target="_blank" variant="success" class="btn instagram-style">Redirect to Instagram</b-button>
+            <b-button href="https://instagram.com" target="_blank" variant="success" class="btn instagram-style">Open Instagram</b-button>
         </div>
     </div>
 </template>

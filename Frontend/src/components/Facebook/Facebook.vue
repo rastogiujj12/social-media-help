@@ -98,7 +98,7 @@
         </div>
         <div class="action-buttons">
             <b-button variant="success" class="btn primary" @click="copyAndDownloadMedia()">Copy Text & Download</b-button>
-            <b-button href="https://facebook.com" target="_blank" variant="success" class="btn facebook-style">Redirect to Facebook</b-button>
+            <b-button href="https://facebook.com" target="_blank" variant="success" class="btn facebook-style">Open Facebook</b-button>
         </div>
     </div>
 </template>
@@ -181,11 +181,6 @@ export default {
             );
             let fileName = uri.split("/").pop();
             saveAs(uri, fileName);
-
-            if (!this.isLoggedIn) {
-                let route = this.$router.resolve("/facebook");
-                window.open(route.href, "_blank");
-            }
         },
         editPost() {
             this.editPostSelector(this.sectionIndex, this.postIndex)
