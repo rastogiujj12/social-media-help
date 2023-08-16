@@ -32,11 +32,12 @@
             </b-col>
             <b-col
                 v-for="(post, postIndex) in section.posts"
-                :key="`${section.name}-${postIndex}`"
+                :key="`${post.image||0}-${post.video||0}`"
                 lg="6"
                 cols="12"
             >
                 <div v-if="section.name == 'Facebook'">
+                    {{ `${post.image||0}-${post.video||0}` }}
                     <facebook
                         :post="post"
                         :isLoggedIn="!!user"
@@ -44,6 +45,8 @@
                         :deletePostSelector="deletePostSelect"
                         :sectionIndex="sectionIndex"
                         :postIndex="postIndex"
+                        :setMedia="setMedia"
+                        :key="`${post.image||0}-${post.video||0}`"
                     />
                 </div>
 
@@ -100,7 +103,7 @@
         </b-row>
 
         <b-modal id="addPost" title="Add new post">
-            <b-form id="addPostForm" @submit.stop.prevent="handleAddPost">
+            <!-- <b-form id="addPostForm" @submit.stop.prevent="handleAddPost"> -->
                 <b-form-group
                     label="Text"
                     label-for="text-input"
@@ -136,7 +139,7 @@
                         "
                     ></b-form-input>
                 </b-form-group>
-            </b-form>
+            <!-- </b-form> -->
             <template #modal-footer="{ cancel }">
                 <!-- <b-btn @click="cancel">Cancel</b-btn> -->
                 <!-- <b-btn variant="primary" type="submit" form="my-form">OK</b-btn> -->
@@ -150,7 +153,7 @@
                 <button
                     type="submit"
                     class="btn btn-primary"
-                    form="addPostForm"
+                    @click="handleAddPost()"
                 >
                     OK
                 </button>
@@ -242,7 +245,7 @@ import {
     BFormSelect,
     BButton,
     BToast,
-    BvToast,
+    VBTooltip
 } from "bootstrap-vue";
 import SvgIcon from "@jamescoyle/vue-icon";
 import {
@@ -267,11 +270,12 @@ export default {
         BButton,
         Facebook,
         Instagram,
-        SvgIcon
+        SvgIcon,
+        BToast
     },
-    // directives:{
-    //     "b-toast":VBToast
-    // },
+    directives:{
+        "b-tooltip": VBTooltip,
+    },
     data() {
         return {
             text: "",
@@ -333,7 +337,22 @@ export default {
             // console.log("section", section);
             this.currSecIndex = index;
             this.postType = section;
-            this.$bvModal.show("addPost");
+            // this.$bvModal.show("addPost");
+            let temp = null;
+
+            if (this.postType == "Facebook") {
+                temp = JSON.parse(JSON.stringify(this.facebookPosts));
+                // temp.text = this.text;
+                // temp.image = this.image;
+                // temp.video = this.video;
+            } else if (this.postType == "Instagram") {
+                temp = JSON.parse(JSON.stringify(this.instagramPosts));
+                // temp.text = this.text;
+                // temp.image = this.image;
+                // temp.video = this.video;
+            }
+            this.sections[this.currSecIndex].posts.push(temp);
+
         },
         cancel() {
             console.log("cancelled");
@@ -501,6 +520,16 @@ export default {
                     this.sections[section].posts.splice(index, 1);
                 }
             })
+        },
+        setMedia(section, index, image, video){
+            console.log("set media", this.sections[section].posts[index], image, video)
+            let temp = {
+                text: this.sections[section].posts[index].text,
+                image, 
+                video
+            }
+            this.sections[section].posts[index] = temp;
+            this.sections[section].posts = JSON.parse(JSON.stringify(this.sections[section].posts))
         },
         editTitleButton(){
             this.editTitle = true;

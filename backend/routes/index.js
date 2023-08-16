@@ -80,12 +80,12 @@ exports = module.exports = function (app) {
 
 	// app.get('/videos',             middleware.isLoggedIn, routes.services.videos.videos);
 	
-	// app.post('/getUploadUrls',     middleware.isLoggedIn, routes.services.videos.getUploadUrls);
+	app.post('/getUploadUrl',     middleware.isLoggedIn, routes.services.pages.getUploadUrl);
 	// app.post('/allFilesUploaded',  middleware.isLoggedIn, routes.services.videos.allFilesUploaded);
 
 	// app.post('/deleteVideo',       middleware.isLoggedIn, routes.services.videos.deleteVideo);
 
-	// app.get('/getPreSignedUrl', middleware.isLoggedIn, routes.services.ffmpeg.getPreSignedUrl);
+	// app.get('/getPreSignedUrl', middleware.isLoggedIn, routes.services.pages.getPreSignedUrl);
 	// app.post('/mergeVideos', routes.services.ffmpeg.mergeVideos);
 
 	//middleware.isLoggedIn to check if user is logged in

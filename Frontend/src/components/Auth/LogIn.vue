@@ -36,7 +36,7 @@
                 </b-form-group>
             </b-form>
             <template #modal-footer="{ cancel }">
-              <button class="btn btn-danger" @click="cancel" form="loginForm">
+              <button class="btn btn-danger" @click="cancel">
                   Cancel
               </button>
               <button type="submit" class="btn btn-primary" form="loginForm">

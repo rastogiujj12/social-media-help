@@ -1,6 +1,37 @@
 const keystone = require('../ks');
 const Page = keystone.list('Page').model;
 
+const AWS = require('aws-sdk');
+
+AWS.config.update({
+    accessKeyId: process.env.S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+});
+const s3 = new AWS.S3({
+    signatureVersion: 'v4',
+    region: 'us-west-1', 
+});
+
+const bucket = process.env.S3_BUCKET
+
+const getPreSignedUrl = async (key) =>{
+    console.log("key", key)
+    return new Promise( async(resolve, reject)=>{
+        let url = await s3.getSignedUrl('putObject', {
+            Bucket: bucket,
+            Key: key,
+            Expires: 60 * 60
+        });
+        // console.log("url", url)
+        // url = url.replace(/%2F/g, "/")
+        // console.log("url",url);
+        return resolve(url)
+    })
+}
+const getUploadUrl = async(req, res) => {
+    let url = await getPreSignedUrl(req.body.name)
+    res.send({url})
+}
 
 const save = async (req, res) =>{
     const { id, title, posts } = req.body;
@@ -31,5 +62,7 @@ const getPage = async (req,res) =>{
 
 module.exports = {
     save,
-    getPage
+    getPage,
+    getPreSignedUrl,
+    getUploadUrl
 }

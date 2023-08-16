@@ -16,7 +16,7 @@ const getters = {
     },
     getUploadUrl(state) {
         let urls = state.uploadUrl; 
-        state.uploadUrl = null;
+        // state.uploadUrl = null;
         return urls;
     }
 }
@@ -29,8 +29,8 @@ const mutations = {
     dashboardVideo(state, video){
         state.dashboardVideo = video;
     },
-    setUploadUrl(state, urls){
-        state.uploadUrl = urls;
+    setUploadUrl(state, url){
+        state.uploadUrl = url;
     }
 }
 
@@ -44,13 +44,15 @@ const actions = {
             })
        }
     },
-    getUploadUrls({commit}, payload){
+    getUploadUrl({commit, dispatch}, payload){
         // console.log("create video", payload)
         return new Promise(async (resolve, reject)=>{
-            AxiosService.post('/getUploadUrls', payload).then((data)=>{
+            AxiosService.post('/getUploadUrl', payload).then((data)=>{
                 console.log("data", data)
-                if(data.urls){
-                   commit("setUploadUrl", data.urls);
+                dispatch('setIsLoading', {value:false})
+                if(data.url){
+                   commit("setUploadUrl", data.url);
+                   
                    return resolve(data);
                 }
                 else{
