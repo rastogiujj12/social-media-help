@@ -3,7 +3,7 @@
     <div id="app" class="container">
       <router-view/>
       <!-- <b-toast? id="my-toast" variant="warning" solid/> -->
-      <profile/>
+      <profile v-if="showHeader"/>
     </div>
   </b-overlay>
 </template>
@@ -18,21 +18,35 @@ export default {
     BOverlay,
     BToast
   },
+  data(){
+    return {
+      showHeader:true
+    }
+  },
   name: 'App',
   created() {
     // Check for token in LocalStorage 
     this.$store.dispatch('autoLogin')
     this.$store.dispatch('setIsLoading',{value:false})
+    this.showHeader = this.$route.path!="/signup" && this.$route.path!="/login"
   },
   computed:{
     isLoading(){
       // console.log('isLoading changed',this.$store.getters.isLoading);
       return this.$store.getters.isLoading || false;
+    },
+    toastMessage(){
+      return this.$store.getters.getToastMessage || false;
     }
   },
   methods:{
     async init(){
       const authToken = this.$store.getters.getAuthToken
+    }
+  },
+  watch:{
+    toastMessage(newVal){
+      if(newVal) this.$bvToast.toast(newVal);
     }
   }
 };

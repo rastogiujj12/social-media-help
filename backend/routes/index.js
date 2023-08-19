@@ -59,7 +59,7 @@ exports = module.exports = function (app) {
 	// app.get('/video',   routes.services.videos.get);
 	// app.get('/getVideosList',   routes.services.videos.getVideosList);
 	app.post('/login',  routes.services.auth.login);
-	// app.post('/signup', routes.services.auth.signup);
+	app.post('/signup', routes.services.auth.signup);
 
 	// app.get('/getVideo/:slug',  routes.services.videos.getVideo);
 
@@ -69,18 +69,13 @@ exports = module.exports = function (app) {
 	app.post("/savepage", middleware.isLoggedIn, routes.services.pages.save )
 	app.get("/page",     routes.services.pages.getPage )
 	
-	app.get('/*', (req, res) => {
-        // console.log('keystone', keystone);
-		// console.log('inside /* routing');
-        // console.log('path',path.join(__dirname,'..','public','index.html'));
-        res.sendFile(path.join(__dirname,'..','public','index.html'));
-    });
 	// app.post('/videoBySlug',  middleware.isLoggedIn, routes.services.videos.getBySlug);
 	// app.post('/directorCuts', middleware.isLoggedIn, routes.services.videos.directorCuts);
 
 	// app.get('/videos',             middleware.isLoggedIn, routes.services.videos.videos);
 	
-	app.post('/getUploadUrl',     middleware.isLoggedIn, routes.services.pages.getUploadUrl);
+	app.post('/getUploadUrl', middleware.isLoggedIn, routes.services.pages.getUploadUrl);
+	app.get("/episodeList",   middleware.isLoggedIn, routes.services.pages.getEpisodes)
 	// app.post('/allFilesUploaded',  middleware.isLoggedIn, routes.services.videos.allFilesUploaded);
 
 	// app.post('/deleteVideo',       middleware.isLoggedIn, routes.services.videos.deleteVideo);
@@ -90,6 +85,12 @@ exports = module.exports = function (app) {
 
 	//middleware.isLoggedIn to check if user is logged in
 	
+	app.get('/*', (req, res) => {
+        // console.log('keystone', keystone);
+		// console.log('inside /* routing');
+        // console.log('path',path.join(__dirname,'..','public','index.html'));
+        res.sendFile(path.join(__dirname,'..','public','index.html'));
+    });
 
 
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:

@@ -9,12 +9,22 @@
                 </div>
                 <div class="edit-icons" v-if="isLoggedIn">
                     <svg-icon
+                        v-if="!isEdit"
                         class="action-icon"
                         type="mdi"
                         @click.native="editPost()"
                         :path="editIcon"
                         v-b-tooltip.hover
                         title="Edit"
+                    ></svg-icon>
+                    <svg-icon
+                        v-else
+                        class="action-icon save-post"
+                        type="mdi"
+                        @click.native="savePost()"
+                        :path="savePostIcon"
+                        v-b-tooltip.hover
+                        title="save post"
                     ></svg-icon>
                     <svg-icon
                         class="delete-icon action-icon"
@@ -52,55 +62,12 @@
                         ></b-form-textarea>
                     </b-form-group>
                 </div>
-                <media-handler :image="post.image" :video="post.video" :isEdit="isEdit" :saveUploadedMedia="uploadMedia"/>
-                <!-- <div v-if="post.image" class="facebook-body-image">
-                    <img :src="post.image" />
-                </div>
-                <div v-else-if="post.video" class="facebook-body-image">
-                    <video
-                        :src="post.video"
-                        controls
-                        type="video/mp4"
-                        playsinline
-                    />
-                </div>
-                <div v-else-if="isNotSaved" class="facebook-body-media">
-                    <div class="file-upload">
-                        <div v-if="!uploadFile" class="input-dialogue">
-                            <div>
-                                <svg-icon
-                                    type="mdi"
-                                    class="file-upload-icon"
-                                    :path="fileUploadIcon"
-                                ></svg-icon>
-                            </div>
-                            <div class="file-upload-heading">
-                                Add photos or videos
-                            </div>
-                            <div class="file-upload-subheading">
-                                or drag and drop
-                            </div>
-                        </div>
-                        <div v-else class="facebook-body-image">
-                            <svg-icon
-                                v-if="isLoggedIn"
-                                type="mdi"
-                                class="file-upload-icon remove-media-icon"
-                                @click.native="removeMedia()"
-                                :path="removeMediaIcon"
-                                v-b-tooltip.hover
-                                title="Remove media"
-                            ></svg-icon>
-                            <img :src="uploadFile" />
-                            <b-button variant="success" class="btn btn-block" @click="uploadMedia">Save</b-button>
-                        </div>
-                        <input
-                            type="file"
-                            @change="fileUpload"
-                            accept="image/*,image/heif,image/heic,video/*,video/mp4,video/x-m4v,video/x-matroska,.mkv"
-                        />
-                    </div>
-                </div> -->
+                <media-handler 
+                    :image="post.image" 
+                    :video="post.video" 
+                    :isEdit="isEdit" 
+                    :saveUploadedMedia="uploadMedia"
+                />
             </div>
             <div class="facebook-footer-1">
                 <div class="facebook-like-number">
@@ -164,7 +131,8 @@ import {
     mdiPencil,
     mdiTrashCanOutline,
     mdiFilePlus,
-    mdiClose
+    mdiClose,
+    mdiCheck
 } from "@mdi/js";
 import {
     BTooltip,
@@ -180,6 +148,7 @@ import {
 import { saveAs } from "file-saver";
 import AxiosService from '../../Services/AxiosService';
 import MediaHandler from "../MediaHandler/MediaHandler.vue"
+
 export default {
     components: {
         SvgIcon,
@@ -200,19 +169,10 @@ export default {
             comment: mdiCommentOutline,
             like: mdiThumbUpOutline,
             share: mdiShareOutline,
-            mediaDownload: mdiDownloadOutline,
-            textCopy: mdiContentCopy,
             editIcon: mdiPencil,
             deleteIcon: mdiTrashCanOutline,
-            fileUploadIcon: mdiFilePlus,
-            removeMediaIcon:mdiClose,
+            savePostIcon: mdiCheck, 
 
-            text: null,
-            image: null,
-            video: null,
-            uploadFile: null,
-            isNotSaved:false,
-            file:null,
             isEdit:false
         };
     },
@@ -257,7 +217,11 @@ export default {
             saveAs(uri, fileName);
         },
         editPost() {
-            this.editPostSelector(this.sectionIndex, this.postIndex);
+            // this.editPostSelector(this.sectionIndex, this.postIndex);
+            this.isEdit = true;
+        },
+        savePost(){
+            this.isEdit = false;
         },
         deletePost() {
             this.deletePostSelector(this.sectionIndex, this.postIndex);
@@ -457,5 +421,9 @@ facebook-post::backdrop {
 .form-input-text {
     height: 80px;
     border: none;
+}
+.save-post{
+    color: white;
+    background: green;
 }
 </style>

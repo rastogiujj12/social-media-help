@@ -1,207 +1,239 @@
 <template>
-  <section> 
-        <b-steps
-            :animated="true"
-            :rounded="true"
-            :has-navigation="true"
-            position="is-right"
-          >
-            <b-step-item step="1" label="Account" :clickable="true">
-                <h1 class="title has-text-centered">Account</h1>
-                <div class="container">
-                  <b-field label="Email">
-                    <b-input
-                      placeholder="Email"
-                      rounded
-                      required
-                      icon="account"
-                      v-model="email"
-                      type="email"
-                    ></b-input>
-                  </b-field>
-
-                  <b-field label="Password">
-                    <b-input
-                      type="password"
-                      required
-                      placeholder="Password"
-                      rounded
-                      icon="lock"
-                      v-model="password"
-                      password-reveal
-                    ></b-input>
-                  </b-field>
-                  <b-field label="Confirm Password">
-                    <b-input
-                      type="password"
-                      required
-                      placeholder="Password"
-                      rounded
-                      icon="lock"
-                      v-model="confirmPassword"
-                      password-reveal
-                    ></b-input>
-                  </b-field>
-                </div>
-            </b-step-item>
-
-            <b-step-item step="2" label="Profile" :clickable="true">
-                <h1 class="title has-text-centered">Profile</h1>
-                <div class="container">
-                  <b-field grouped >
-                    <b-field label="First Name">
-                      <b-input
-                        placeholder="First"
-                        rounded
-                        required
-                        v-model="firstName"
-                        type="text"
-                      ></b-input>
-                    </b-field>
-                    <b-field label="Last Name">
-                      <b-input
-                        placeholder="Last"
-                        rounded
-                        required
-                        v-model="lastName"
-                        type="text"
-                      ></b-input>
-                    </b-field>
-                  </b-field>
-                   <b-field grouped >
-                     <b-field label="Subdomain">
-                      <b-input
-                        placeholder="video"
-                        rounded
-                        required
-                        v-model="subdomain"
-                        type="text"
-                      ></b-input>
-                    </b-field> 
-                    <b-field label="Domain">
-                        <b-input
-                        placeholder="example.com"
-                        rounded
-                        required
-                        v-model="domain"
-                        type="text"
-                      ></b-input>
-                    </b-field>
-                  </b-field>
-                   <b-message type="is-info" has-icon>
-                     Subdomain is used for the easy intergration of the tool. The subdomain you entered will be used for all the videos. If you do not know what is a subdomain please refer to <a href="https://www.namecheap.com/blog/what-is-a-subdomain-dp/" target="_blank">this blog</a>
-                  </b-message>
-                </div>
-            </b-step-item>
-
-            <b-step-item :step="3" label="Finish" :clickable="true" disabled>
-                <h1 class="title has-text-centered">Finish</h1>
-                <div class="container">
-                  <b-message type="is-success" has-icon>
-                    Setting up is almost finished, Just head over to your domain registrar and add an "A record" for the Subdomain you entered in the previous step, and point it this IP address 13.52.83.102. <br/>
-                    Here is how you can do that in most popular domain registrars <br/>
-                    <ul>
-                      <li><a href="https://in.godaddy.com/help/create-a-subdomain-4080" target="_blank">GoDaddy</a></li>
-                      <li><a href="https://www.bluehost.com/help/article/subdomains" target="_blank">Bluehost</a></li>
-                      <li><a href="https://www.hostgator.com/help/article/changing-mx-a-cname-records-plesk-10" target="_blank">HostGator</a></li>
-                    </ul>
-                  </b-message>
-                  <b-button class="loginBtn" rounded outlined expanded type="is-success" @click="onSubmit">
-                    <p class="has-text-weight-bold">Submit</p>
-                  </b-button>
-                </div>
-            </b-step-item>
-        </b-steps>
-    </section>
+  <div class="page">
+    <div class="signup">
+      <h2>Collabroflow</h2>
+      <b-form id="signup-form" @submit="onSubmit">
+        <b-form-group
+            label="Name"
+            label-for="name-input"
+        > 
+          <div class="d-flex">
+            <b-form-input
+                id="first-name-input"
+                class="name"
+                v-model="firstName"
+                type="text"
+                :required="true"
+                placeholder="First name"
+            ></b-form-input>
+            <b-form-input
+                id="last-name-input"
+                class="name"
+                v-model="lastName"
+                type="text"
+                :required="true"
+                placeholder="Last name"
+            ></b-form-input>
+            </div>
+        </b-form-group>
+        <b-form-group
+            label="Email"
+            label-for="email-input"
+        >
+            <b-form-input
+                id="email-input"
+                v-model="email"
+                type="email"
+                :required="true"
+                placeholder="Email"
+            ></b-form-input>
+        </b-form-group>
+        <b-form-group label="Password" label-for="password">
+            <b-form-input
+                id="password-input"
+                type="password"
+                v-model="password"
+                :required="true"
+                placeholder="Password"
+                :state="passwordValidation"
+            ></b-form-input>
+        </b-form-group>
+        <b-form-group label="Re-enter Password" label-for="password">
+            <b-form-input
+                id="password-input-2"
+                type="password"
+                v-model="password2"
+                :required="true"
+                placeholder="Password"
+                :state="passwordValidation"
+            ></b-form-input>
+        </b-form-group>
+        <b-button type="submit" class="btn btn-primary w-100" variant="primary" block>
+            Sign up
+        </b-button>
+      </b-form>
+    </div>
+  </div>
 </template>
 
 <script>
-import ValidationService from "../../Services/ValidationService";
-import errors from "../../Constants/errors";
-
+import { 
+  BModal, 
+  BButton,
+  BFormGroup,
+  BFormInput,
+  BForm,
+  BDropdown,
+  BDropdownItem,
+  BToast
+} from "bootstrap-vue";
 export default {
-  data() {
-    return {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      domain:'',
-      subdomain:''
-    };
+  components: {
+      BModal,
+      BButton,
+      BFormGroup,
+      BFormInput,
+      BForm,
+      BDropdown,
+      BDropdownItem,
+      BToast
   },
-  created() {
-    this.$store.dispatch("changeTitle", "SIGN UP");
+  data() {
+      return {
+        firstName: null,
+        lastName:null,
+        email: null,
+        password: null,
+        password2: null,
+        loggedIn: false,
+      };
+  },
+  computed: {
+      userId() {
+          return this.$store.getters.getUserId;
+      },
   },
   methods: {
-    validateInputs() {
-      const errorsArray = [];
-
-      if (
-        this.email &&
-        this.password &&
-        this.confirmPassword &&
-        this.firstName &&
-        this.lastName &&
-        this.domain &&
-        this.subdomain 
-      ) {
-        if (this.password !== this.confirmPassword) {
-          errorsArray.push(errors.password);
-        }
-        if (!ValidationService.validateEmail(this.email)) {
-          errorsArray.push(errors.email);
-        }
-      } else {
-        errorsArray.push(errors.general);
-      }
-
-      if (errorsArray.length) {
-        return { success: false, errors: true, errorsArray };
-      }
-      return { success: true, errors: false, errorsArray };
-    },
-
-    onSubmit() {
-      const status = this.validateInputs();
-
-      if (status.success) {
-        const formData = {
-          firstName: this.firstName,
-          lastName: this.lastName,
-          email: this.email,
-          password: this.password,
-          domain: this.domain,
-          subdomain: this.subdomain
-        };
-        this.$store.dispatch("signup", formData);
-      } else {
-        this.dangerToast(status.errorsArray.join(" , "));
-      }
-    },
-    dangerToast(message) {
-      this.$buefy.toast.open({
-        duration: 2000,
-        message,
-        position: "is-top",
-        type: "is-danger",
-      });
-    },
+      onSubmit(event) {
+        event.preventDefault()
+          // this.$router.push('/dashboard')
+          console.log("on submit")
+          if (this.firstName && this.lastName && this.email && this.password && this.password2) {
+            console.log("all values found")
+              if(this.password!=this.password2){
+                console.log("password same as password 2")
+                this.$bvToast.toast(`Password do not match, please try again`, {
+                    autoHideDelay: 5000,
+                    solid: true,
+                });
+                return;
+              }
+              this.$store.dispatch("signup", {
+                  firstName:this.firstName, 
+                  lastName:this.lastName,
+                  email: this.email,
+                  password: this.password,
+              });
+              // this.$bvModal.hide("loginModal")
+          }
+      },
+      // openLogin() {
+      //   this.$bvModal.show("loginModal");
+      // },
+      // logout(){
+      //     this.$store.dispatch("logout")
+      // }
+  },
+  computed:{
+    passwordValidation(){
+      if(!this.password || !this.password2) return true
+      else return this.password == this.password2 
+    }
   },
 };
 </script>
 
 <style scoped>
-#signup {
-  padding: 10px;
-  background: var(--primary-color);
-  min-height: calc(100% - 50px);
+
+h2{
+  text-align: center;
 }
-.container{
+.page{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.signup{
+  width:35%;
   max-width: 500px;
 }
-.label{
-  color:white;
+.name{
+  width:50%;
 }
+#login {
+  max-width: 100%;
+  min-height: calc(100% - 50px);
+  background: var(--primary-color);
+}
+.loginBtn {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.logo {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.logo img {
+  background: white;
+}
+.tab-buttons {
+  width: 47%;
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+
+.forgot-password {
+  color: var(--secondary-color);
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0px;
+  margin-bottom: 16px;
+}
+.footer-class {
+  /* margin-top: 10%; */
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  /* -webkit-box-orient: vertical; */
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: 100%;
+}
+#form {
+  max-width: 500px;
+  margin: auto;
+}
+/* #pentagon {
+  position: relative;
+  width: 54px;
+  box-sizing: content-box;
+  border-width: 50px 18px 0;
+  border-style: solid;
+  border-color: red transparent;
+}
+#pentagon:before {
+  content: "";
+  position: absolute;
+  height: 0;
+  width: 0;
+  top: -85px;
+  left: -18px;
+  border-width: 0 45px 35px;
+  border-style: solid;
+  border-color: transparent transparent red;
+} */
+/* .profile {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+} */
 </style>

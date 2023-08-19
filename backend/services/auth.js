@@ -13,21 +13,22 @@ async function signup(req, res) {
 		});
 	}
 	
-	const {
+	let {
 		firstName,
 		lastName,
 		email,
-		password,
-		domain, 
-		subdomain
+		password
 	} = req.body;
+
+	email = email.toLowerCase();
+
 	try {
 		let user = await User.findOne({
 			email
 		});
 		if (user) {
-			return res.status(400).json({
-				msg: "Email Already Exists"
+			return res.status(200).json({
+				error: "Email Already Exists"
 			});
 		}
 
@@ -35,7 +36,6 @@ async function signup(req, res) {
 			name:{ first: firstName, last: lastName },
 			email,
 			password,
-			subdomain: `${subdomain}.${domain}`
 		});
 
 		await user.save();
@@ -59,7 +59,7 @@ async function signup(req, res) {
 		);
 	} catch (err) {
 		console.log(err);
-		res.status(500).send("Error in Saving");
+		res.status(200).json({error:"Some error occured, check details and try again"});
 	}
 }
 
@@ -73,7 +73,10 @@ async function login(req, res) {
 		});
 	}
 
-	const {email, password} = req.body;
+	let {email, password} = req.body;
+
+	email = email.toLowerCase();
+	
 	try {
 		let user = await User.findOne({
 			email

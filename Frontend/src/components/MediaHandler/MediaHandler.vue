@@ -1,19 +1,21 @@
 <template>
     <div>
-        <div v-if="image" class="facebook-body-image">
-            <img :src="image" />
+        <div v-if="!isEdit">
+            <div v-if="image" class="facebook-body-image">
+                <img :src="image" />
+            </div>
+            <div v-else-if="video" class="facebook-body-image">
+                <video
+                    :src="video"
+                    controls
+                    type="video/mp4"
+                    playsinline
+                />
+            </div>
         </div>
-        <div v-else-if="video" class="facebook-body-image">
-            <video
-                :src="video"
-                controls
-                type="video/mp4"
-                playsinline
-            />
-        </div>
-        <div v-else-if="isEdit" class="facebook-body-media">
+        <div v-else class="facebook-body-media">
             <div class="file-upload">
-                <div v-if="!uploadFile" class="input-dialogue">
+                <div v-if="!uploadImage && !uploadVideo" class="input-dialogue">
                     <div>
                         <svg-icon
                             type="mdi"
@@ -39,10 +41,18 @@
                         v-b-tooltip.hover
                         title="Remove media"
                     ></svg-icon>
-                    <img :src="uploadFile" />
-                    <b-button variant="success" class="btn btn-block" @click="uploadMedia">Save</b-button>
+                    <img v-if="uploadImage" :src="uploadImage" />
+                    <video
+                        v-if="uploadVideo"
+                        :src="uploadVideo"
+                        controls
+                        type="video/mp4"
+                        playsinline
+                    />
+                    <b-button v-if="file" variant="success" class="btn btn-block" @click="uploadMedia">Upload Media</b-button>
                 </div>
                 <input
+                    v-if="!uploadImage && !uploadVideo"
                     type="file"
                     @change="fileUpload"
                     accept="image/*,image/heif,image/heic,video/*,video/mp4,video/x-m4v,video/x-matroska,.mkv"
@@ -56,7 +66,7 @@
 import SvgIcon from "@jamescoyle/vue-icon";
 import {
     mdiFilePlus,
-    mdiClose
+    mdiClose,
 } from "@mdi/js";
 import AxiosService from '../../Services/AxiosService';
 import {     
@@ -75,7 +85,8 @@ export default {
     },
     data() {
         return {
-            uploadFile:null,
+            uploadVideo:null,
+            uploadImage:null,
             file:null,
 
             fileUploadIcon: mdiFilePlus,
@@ -88,13 +99,29 @@ export default {
         isEdit:Boolean,
         saveUploadedMedia:Function
     },
+    mounted(){
+        this.init()
+    },
     methods:{
+        init(){
+            console.log("isEdit", this.isEdit, "image", this.image, "video", this.video)
+            if(this.isEdit && (this.image || this.video)){
+                if(this.image) this.uploadImage = this.image
+                else this.uploadVideo = this.video
+            }
+        },
         fileUpload(file) {
             this.file = file.target.files[0]
-            this.uploadFile = URL.createObjectURL(file.target.files[0]);
+            if(this.file.type.includes("image")) this.uploadImage = URL.createObjectURL(file.target.files[0]);
+            else this.uploadVideo = URL.createObjectURL(file.target.files[0]);
+            
+            // this.uploadFile = URL.createObjectURL(file.target.files[0]);
         },
         removeMedia(){
-            this.uploadFile = null;
+            // this.uploadFile = null;
+            this.uploadImage = null
+            this.uploadVideo = null
+            this.saveUploadedMedia(null, null)
         },
         async uploadMedia(){
             this.$store.dispatch('setIsLoading',{value:true})
@@ -132,6 +159,11 @@ export default {
                 }
             })
         },
+    },
+    watch:{
+        isEdit(){
+            this.init()
+        }
     }
 
 
@@ -140,6 +172,10 @@ export default {
 
 <style scoped>
 img {
+    width: 100%;
+    height: 100%;
+}
+video{
     width: 100%;
     height: 100%;
 }

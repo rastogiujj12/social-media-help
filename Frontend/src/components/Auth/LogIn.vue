@@ -2,13 +2,15 @@
     <div class="profile">
         <div v-if="user">
             <b-dropdown id="dropdown-1" :text="`${user.name.first} ${user.name.last}`" class="m-md-2">
+                <b-dropdown-item href="/" >Episode List</b-dropdown-item>
+                <b-dropdown-item href="/episode" >New Episode</b-dropdown-item>
                 <b-dropdown-item @click="logout">Logout</b-dropdown-item>
             </b-dropdown>
 
         </div>
         <div v-else>
             <button @click="openLogin" class="btn btn-primary" form="form">
-                Login
+                Podcast host login
             </button>
             <!-- TODO logout -->
         </div>
@@ -35,6 +37,8 @@
                     ></b-form-input>
                 </b-form-group>
             </b-form>
+            <span>Don't have an account? <a href="/signup">click here to sign up</a></span>
+
             <template #modal-footer="{ cancel }">
               <button class="btn btn-danger" @click="cancel">
                   Cancel

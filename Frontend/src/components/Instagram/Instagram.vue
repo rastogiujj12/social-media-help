@@ -7,15 +7,24 @@
                     <div class="instagram-heading-name">John Doe</div>
                     <div class="instagram-heading-location">Universal Studios</div>
                 </div>
-                <div class="edit-icons">
+                <div class="edit-icons" v-if="isLoggedIn">
                     <svg-icon
+                        v-if="!isEdit"
                         class="action-icon"
-                        v-if="isLoggedIn"
                         type="mdi"
                         @click.native="editPost()"
                         :path="editIcon"
                         v-b-tooltip.hover
                         title="Edit"
+                    ></svg-icon>
+                    <svg-icon
+                        v-else
+                        class="action-icon save-post"
+                        type="mdi"
+                        @click.native="savePost()"
+                        :path="savePostIcon"
+                        v-b-tooltip.hover
+                        title="save post"
                     ></svg-icon>
                     <svg-icon
                         class="delete-icon action-icon"
@@ -29,28 +38,18 @@
                 </div>
             </div>
             <div class="instagram-body">
-                <div v-if="post.image" class="instagram-body-image">
+                <!-- <div v-if="post.image" class="instagram-body-image">
                     <img :src="post.image" />
-                    <!-- <svg-icon
-                        type="mdi"
-                        class="action-icon"
-                        :path="mediaDownload"
-                        v-b-tooltip.hover
-                        @click.native="downloadURI(post.image)"
-                        title="Download Image"
-                    ></svg-icon> -->
                 </div>
                 <div v-else-if="post.video" class="instagram-body-image">
                     <video :src="post.video" controls type="video/mp4" playsinline/>
-                    <!-- <svg-icon
-                        type="mdi"
-                        class="action-icon"
-                        :path="mediaDownload"
-                        v-b-tooltip.hover
-                        @click.native="downloadURI(post.video)"
-                        title="Download Video"
-                    ></svg-icon> -->
-                </div>
+                </div> -->
+                <media-handler 
+                    :image="post.image" 
+                    :video="post.video" 
+                    :isEdit="isEdit" 
+                    :saveUploadedMedia="uploadMedia"
+                />
             </div>
 
             <div class="instagram-footer">
@@ -149,18 +148,24 @@
                 </div>
             </div>
             <div class="instagram-post-like-count">1,523 likes</div>
-            <div  class="instagram-text-container">
+            <div v-if="!isEdit" class="instagram-text-container">
                 <span>
                     <span class="instagram-post-like-count">John Doe</span>
-                    {{ post.text }}</span>
-                <!-- <svg-icon
-                    type="mdi"
-                    class="action-icon text-copy"
-                    @click.native="copyText(post.text)"
-                    :path="textCopy"
-                    v-b-tooltip.hover
-                    title="Copy Text"
-                ></svg-icon> -->
+                    {{ post.text }}
+                </span>
+            </div>
+            <div v-else>
+                <span class="instagram-post-like-count">John Doe</span>
+                <b-form-textarea
+                    id="text-input"
+                    v-model="post.text"
+                    class="form-input-text"
+                    placeholder="Write a caption"
+                    rows="3"
+                    :lazy="true"
+                    :no-resize="true"
+                    required
+                ></b-form-textarea>
             </div>
         </div>
         <div class="action-buttons">
@@ -176,18 +181,24 @@ import {
     mdiDownloadOutline,
     mdiPencil,
     mdiTrashCanOutline,
-    mdiContentCopy
+    mdiContentCopy,
+    mdiCheck
 } from "@mdi/js";
 import { 
     BTooltip,
     VBTooltip,
-    BButton
+    BButton,
+    BFormTextarea
 } from "bootstrap-vue";
+import MediaHandler from "../MediaHandler/MediaHandler.vue"
+
 export default {
     components: {
         SvgIcon,
         BTooltip,
-        BButton
+        BButton,
+        MediaHandler,
+        BFormTextarea
     },
     directives: {
         "b-tooltip": VBTooltip,
@@ -197,7 +208,9 @@ export default {
             mediaDownload: mdiDownloadOutline,
             editIcon: mdiPencil,
             deleteIcon:mdiTrashCanOutline,
-            textCopy: mdiContentCopy,
+            savePostIcon: mdiCheck, 
+
+            isEdit:false
         };
     },
     props: {
@@ -206,7 +219,16 @@ export default {
         editPostSelector: Function,
         deletePostSelector: Function, 
         sectionIndex: Number,
-        postIndex: Number
+        postIndex: Number,
+        setMedia: Function
+    },
+    mounted(){
+        console.log("post", this.post)
+        if(!this.post.text && !this.post.image && !this.post.video) 
+            this.isNotSaved = true 
+
+
+        this.isEdit = this.isLoggedIn;
     },
     methods:{
         copyAndDownloadMedia(){
@@ -227,10 +249,19 @@ export default {
             saveAs(uri, fileName)
         },
         editPost(){
-            this.editPostSelector(this.sectionIndex, this.postIndex)
+            // this.editPostSelector(this.sectionIndex, this.postIndex)
+            this.isEdit = true;
+        },
+        savePost(){
+            this.isEdit = false;
         },
         deletePost(){
             this.deletePostSelector(this.sectionIndex, this.postIndex)
+        },
+        uploadMedia(image, video){
+            console.log("facebook upload media called", image, video)
+            this.setMedia(this.sectionIndex, this.postIndex, image, video)
+            this.isEdit = false
         }
     }
 };
@@ -333,6 +364,10 @@ export default {
 }
 .instagram-style{
     background:radial-gradient(ellipse at 30% 147%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+}
+.form-input-text {
+    height: 80px;
+    border: none;
 }
 .post{
     margin-bottom: 20px;

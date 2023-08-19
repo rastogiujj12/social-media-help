@@ -2,6 +2,7 @@ const state = {
     // isSidebarOpen: false, 
     // navbarTitle: '',
     isLoading:false,
+    toastMessage:null,
     // view1progress:100,
     // view2progress:100,
     // view3progress:100,
@@ -19,6 +20,9 @@ const getters = {
     isLoading(state){
         return state.isLoading;
     },
+    getToastMessage(state){
+        return state.toastMessage;
+    }
     // view1progress(state){
     //     return state.view1progress;
     // },
@@ -35,6 +39,9 @@ const getters = {
 
 
 const mutations = {
+    setToastMessage(state, value){
+        state.toastMessage = value;
+    },
     // toggleSidebar(state) {
     //     state.isSidebarOpen = !state.isSidebarOpen; 
     // },
@@ -69,6 +76,9 @@ const actions = {
     setIsLoading({commit}, {value}){
         commit('setIsLoading', value)
     },
+    setToastMessage({commit}, {value}){
+        commit("setToastMessage", value)
+    }
     // setView1Progress({commit}, progress){
     //     commit("setView1Progress", progress)
     // },

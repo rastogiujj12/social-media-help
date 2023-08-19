@@ -37,7 +37,7 @@
                 cols="12"
             >
                 <div v-if="section.name == 'Facebook'">
-                    {{ `${post.image||0}-${post.video||0}` }}
+                    <!-- {{ `${post.image||0}-${post.video||0}` }} -->
                     <facebook
                         :post="post"
                         :isLoggedIn="!!user"
@@ -57,7 +57,10 @@
                         :editPostSelector="editPostSelect"
                         :deletePostSelector="deletePostSelect"
                         :sectionIndex="sectionIndex"
-                        :postIndex="postIndex" />
+                        :postIndex="postIndex"
+                        :setMedia="setMedia"
+                        :key="`${post.image||0}-${post.video||0}`" 
+                    />
                 </div>
             </b-col>
 
@@ -443,7 +446,7 @@ export default {
                     this.title = data.title
                     this.sections = JSON.parse(data.posts);
                     this.id = data._id
-                    this.shareUrl = `${window.location.hostname}/?page=${data._id}`;
+                    this.shareUrl = `${window.location.hostname}/episode?page=${data._id}`;
 
                     this.sectionOptions.forEach(option=>{
                         option.isAdded = false;

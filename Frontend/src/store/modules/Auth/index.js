@@ -42,26 +42,30 @@ const mutations = {
 };
 
 const actions = {
-    // signup({ dispatch }, authData) {
-    //     AxiosService.post('/signup', authData).then(({ id, error, msg }) => {
-    //         if (!error) {
-    //             router.replace('/login')
-    //             dispatch('login', { email: authData.email, password: authData.password })
-    //             Toast.open({
-    //                 duration: 5000,
-    //                 message: 'Account created successfully',
-    //                 type: 'is-success'
-    //             })
-    //         }
-    //         else if (error) {
-    //             Toast.open({
-    //                 duration: 5000,
-    //                 message: msg,
-    //                 type: 'is-danger'
-    //             })
-    //         }
-    //     })
-    // },
+    signup({ dispatch }, authData) {
+        dispatch('setIsLoading',{value:true})
+        AxiosService.post('/signup', authData).then(({ id, error, msg }) => {
+            dispatch('setIsLoading',{value:false})
+            if (!error) {
+                router.replace('/')
+                dispatch('login', { email: authData.email, password: authData.password })
+                // Toast.open({
+                //     duration: 5000,
+                //     message: 'Account created successfully',
+                //     type: 'is-success'
+                // })
+                dispatch("setToastMessage", {value:"Account created successfully"})
+                // this.$app.$root.$bvToast.toast("Account created successfully", {
+                // });
+            }
+            else if (error) {
+                console.log("error", error)
+                dispatch("setToastMessage", {value:error})
+                // this.$app.$root.$bvToast.toast(error, {
+                //  });
+            }
+        })
+    },
 
     login({ commit, dispatch }, { email, password }) {
         dispatch('setIsLoading',{value:true})
@@ -70,31 +74,34 @@ const actions = {
             if (token) {
                 //do something
                 localStorage.setItem("Authorization", token);
+                localStorage.setItem("userData", userData);
                 console.log("token", token)
                 commit('setAuth', token)
                 commit('setUser', userData)
                 AxiosService.updateAuthHeaders(token);
 
                 // dispatch("getUser");
-                // router.go()
+                router.go()
                 // dispatch('autoLogin')
             }
             else {
-                Toast.open({
-                    duration: 2000,
-                    message: 'Invalid email or password',
-                    type: 'is-danger'
-                })
+                dispatch("setToastMessage", {value:'Invalid email or password'})
+                // Toast.open({
+                //     duration: 2000,
+                //     message: 'Invalid email or password',
+                //     type: 'is-danger'
+                // })
             }
         });
     },
     logout({ commit }) {
         commit('clearAuth')
         AxiosService.updateAuthHeaders('')
+        localStorage.removeItem('userData')
         localStorage.removeItem('Authorization')
         localStorage.removeItem('expiresAt')
 
-        router.go() // or push ??
+        router.go()
     },
 
     autoLogin({ commit, dispatch }) {
@@ -112,6 +119,7 @@ const actions = {
                     localStorage.setItem("Authorization", token);
                     // chrome.storage.sync.set({Authorization: token});
                     dispatch("getUser");
+                    // router.go()
                     // console.log("router", router);
                     // router.replace('/dashboard')
                     return resolve({ login: true });

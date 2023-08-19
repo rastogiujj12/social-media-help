@@ -60,9 +60,19 @@ const getPage = async (req,res) =>{
     res.send({data:page})
 }
 
+const getEpisodes = async(req, res) =>{
+
+    console.log("get Episodes")
+
+    let epiosdeList = await Page.find({createdBy:req.user.id}, {title:1, createdAt:1});
+    console.log("episodeList", epiosdeList)
+    res.send({data:epiosdeList});
+}
+
 module.exports = {
     save,
     getPage,
     getPreSignedUrl,
-    getUploadUrl
+    getUploadUrl,
+    getEpisodes
 }
