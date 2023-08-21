@@ -54,7 +54,9 @@ module.exports = Field.create({
 
 		this._currentValue = this.props.value;
 		tinymce.init(opts);
-		this.setState({ wysiwygActive: true });
+		if (evalDependsOn(this.props.dependsOn, this.props.values)) {
+			this.setState({ wysiwygActive: true });
+		}
 	},
 
 	removeWysiwyg (state) {
@@ -112,10 +114,10 @@ module.exports = Field.create({
 	getOptions () {
 		var plugins = ['code', 'link'];
 		var options = Object.assign(
-				{},
-				Keystone.wysiwyg.options,
-				this.props.wysiwyg
-			);
+			{},
+			Keystone.wysiwyg.options,
+			this.props.wysiwyg
+		);
 		var toolbar = options.overrideToolbar ? '' : 'bold italic | alignleft aligncenter alignright | bullist numlist | outdent indent | removeformat | link ';
 		var i;
 
@@ -162,6 +164,7 @@ module.exports = Field.create({
 			plugins: plugins,
 			menubar: options.menubar || false,
 			skin: options.skin || 'keystone',
+			branding: false,
 		};
 
 		if (this.shouldRenderField()) {

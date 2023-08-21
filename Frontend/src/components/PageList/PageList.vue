@@ -1,33 +1,42 @@
 <template>
     <b-container>
-        <h3>Episode List</h3>
+        <h3>Episode Lisst</h3>
 
         <b-table
             :items="items"
             :fields="fields"
         >
-            <template #cell(actions)="row">
-                {{ row }}
-                <a href="`/episode?page=${row}`" target="_blank">Open Episode</a>
+            <template v-slot:cell(_id)="row">
+                <a class="btn btn-primary" :href="`/episode?page=${row.value}`" target="_blank"> Open Episode</a>
             </template> 
+
+            <template #row-details="row">
+                <b-card>
+                <ul>
+                    <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
+                </ul>
+                </b-card>
+            </template>
+
         </b-table>
     </b-container>
 </template>
 
 <script>
-import {BContainer, BTable} from "bootstrap-vue";
+import {BContainer, BTable, BButton } from "bootstrap-vue";
 import AxiosService from '../../Services/AxiosService';
 export default {
     components:{
         BContainer, 
-        BTable
+        BTable,
+        BButton
     },
     data(){
         return{
             items:[],
             fields:[
                 {key:"title",  label:"Episode Name"},
-                {key:"created_at", label:"Created At"},
+                {key:"createdAt", label:"Created At"},
                 {key:"_id", label:"Actions"}
             ]
         }
@@ -42,7 +51,7 @@ export default {
     methods:{
         init(){
             this.$store.dispatch("setIsLoading", {value:true})
-            AxiosService.get("/episodeList").then((data)=>{
+            AxiosService.get("/episodeList").then(({data})=>{
                 this.$store.dispatch("setIsLoading", {value:false})
                 this.items = data;
             })

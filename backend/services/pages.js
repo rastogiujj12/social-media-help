@@ -45,7 +45,8 @@ const save = async (req, res) =>{
     else {
         page = new Page({
             title,
-            posts
+            posts,
+            author:req.user.id
         })
         result = await page.save()
     }
@@ -64,7 +65,7 @@ const getEpisodes = async(req, res) =>{
 
     console.log("get Episodes")
 
-    let epiosdeList = await Page.find({createdBy:req.user.id}, {title:1, createdAt:1});
+    let epiosdeList = await Page.find({author:req.user.id}, {title:1, createdAt:1}).lean();
     console.log("episodeList", epiosdeList)
     res.send({data:epiosdeList});
 }

@@ -208,13 +208,10 @@ export default {
             });
         },
         downloadURI(uri) {
-            this.$store.dispatch("setIsLoading", { value: true });
-            setTimeout(
-                () => this.$store.dispatch("setIsLoading", { value: false }),
-                2000
-            );
-            let fileName = uri.split("/").pop();
-            saveAs(uri, fileName);
+            let link = document.createElement("a");
+            link.download = uri.split("/").pop();
+            link.href = uri;
+            link.click();
         },
         editPost() {
             // this.editPostSelector(this.sectionIndex, this.postIndex);

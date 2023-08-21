@@ -32,6 +32,7 @@ module.exports = function openDatabaseConnection (callback) {
 				rs_name: replicaData.db.replicaSetOptions.rs_name,
 				readPreference: replicaData.db.replicaSetOptions.readPreference,
 			},
+			useMongoClient: true,
 		};
 
 		debug('connecting to replica set');
@@ -40,23 +41,29 @@ module.exports = function openDatabaseConnection (callback) {
 	} else {
 		debug('connecting to mongo');
 		keystone.initDatabaseConfig();
-		keystone.mongoose.connect(keystone.get('mongo'), keystone.get('mongo options'));
+		var mongo_options = keystone.get('mongo options') || {};
+		mongo_options.useMongoClient = true;
+		keystone.mongoose.connect(keystone.get('mongo'), mongo_options);
 	}
 
-	keystone.mongoose.connection.once('error', function (err) {
+	keystone.mongoose.connection.on('error', function (err) {
 
-		if (keystone.get('logger')) {
-			console.log('------------------------------------------------');
-			console.log('Mongo Error:\n');
-			console.log(err);
-		}
+		// The DB connection has been established previously and this a ValidationError caused by restrictions Mongoose is enforcing on the field value
+		// We can ignore these here; they'll also be picked up by the 'error' event listener on the model; see /lib/list/register.js
+		if (mongoConnectionOpen && err && err.name === 'ValidationError') return;
 
-		if (mongoConnectionOpen) {
-			if (err.name === 'ValidationError') return;
-			throw err;
-		} else {
+		// Alternatively, the error is legitimate; output it
+		console.error('------------------------------------------------');
+		console.error('Mongoose connection "error" event fired with:');
+		console.error(err);
+
+		// There's been an error establishing the initial connection, ie. Keystone is attempting to start
+		if (!mongoConnectionOpen) {
 			throw new Error('KeystoneJS (' + keystone.get('name') + ') failed to start - Check that you are running `mongod` in a separate process.');
 		}
+
+		// Otherwise rethrow the initial error
+		throw err;
 
 	}).once('open', function () {
 

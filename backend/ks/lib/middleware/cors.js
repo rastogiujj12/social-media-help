@@ -17,6 +17,7 @@
 
 module.exports = function (keystone) {
 	return function cors (req, res, next) {
+
 		var origin = keystone.get('cors allow origin');
 		if (origin) {
 			res.header('Access-Control-Allow-Origin', origin === true ? '*' : origin);
@@ -28,6 +29,7 @@ module.exports = function (keystone) {
 		if (keystone.get('cors allow headers') !== false) {
 			res.header('Access-Control-Allow-Headers', keystone.get('cors allow headers') || 'Content-Type, Authorization');
 		}
+
 		next();
 	};
 };

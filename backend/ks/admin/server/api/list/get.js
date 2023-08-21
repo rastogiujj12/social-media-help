@@ -7,7 +7,6 @@ module.exports = function (req, res) {
 	var fields = req.query.fields;
 	var includeCount = req.query.count !== 'false';
 	var includeResults = req.query.results !== 'false';
-
 	if (includeResults && fields) {
 		if (fields === 'false') {
 			fields = false;
