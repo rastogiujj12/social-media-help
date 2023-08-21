@@ -49,7 +49,7 @@
                         type="video/mp4"
                         playsinline
                     />
-                    <b-button v-if="file" variant="success" class="btn btn-block" @click="uploadMedia">Upload Media</b-button>
+                    <!-- <b-button v-if="file" variant="success" class="btn btn-block" @click="uploadMedia">Upload Media</b-button> -->
                 </div>
                 <input
                     v-if="!uploadImage && !uploadVideo"
@@ -137,7 +137,7 @@ export default {
                     const configUpload = {
                         onUploadProgress: function(progressEvent) {
                             let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-                            // console.log("percentCompleted", percentCompleted)
+                            console.log("percentCompleted", percentCompleted)
                             // store.dispatch("setView1Progress", percentCompleted);
                         }
                     }
@@ -163,6 +163,10 @@ export default {
     watch:{
         isEdit(){
             this.init()
+        },
+        file(newVal){
+            if(!newVal) return
+            this.uploadMedia()
         }
     }
 
