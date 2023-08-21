@@ -4,8 +4,8 @@ console.log("axios service", this)
 
 
 // const endpoint = "192.168.1.54:3000"
-const endpoint = "http://localhost:3000"
-// const endpoint = "https://api.collabroflow.com"
+// const endpoint = "http://localhost:3000"
+const endpoint = "https://api.collabroflow.com"
 
 let headers = {
     Authorization:''
