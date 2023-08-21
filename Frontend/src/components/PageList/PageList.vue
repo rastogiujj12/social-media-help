@@ -1,6 +1,6 @@
 <template>
-    <b-container>
-        <h3>Episode Lisst</h3>
+    <div class="collab-history">
+        <h3>Collab History</h3>
 
         <b-table
             :items="items"
@@ -19,17 +19,38 @@
             </template>
 
         </b-table>
-    </b-container>
+        <div 
+            class="add-episode" 
+            v-b-tooltip.hover
+            title="Add Episode"
+            @click="addPost()"
+        >
+            <svg-icon
+                class="action-icon"
+                type="mdi"
+                :path="addIcon"
+            ></svg-icon>
+        </div>
+    </div>
 </template>
 
 <script>
-import {BContainer, BTable, BButton } from "bootstrap-vue";
+import {BContainer, BTable, BButton, BTooltip, VBTooltip, } from "bootstrap-vue";
 import AxiosService from '../../Services/AxiosService';
+import SvgIcon from "@jamescoyle/vue-icon";
+import {
+    mdiPlus
+} from "@mdi/js";
 export default {
     components:{
         BContainer, 
         BTable,
-        BButton
+        BButton,
+        SvgIcon,
+        BTooltip
+    },
+    directives: {
+        "b-tooltip": VBTooltip,
     },
     data(){
         return{
@@ -38,7 +59,8 @@ export default {
                 {key:"title",  label:"Episode Name"},
                 {key:"createdAt", label:"Created At"},
                 {key:"_id", label:"Actions"}
-            ]
+            ],
+            addIcon: mdiPlus
         }
     },
     created(){
@@ -55,6 +77,9 @@ export default {
                 this.$store.dispatch("setIsLoading", {value:false})
                 this.items = data;
             })
+        },
+        addPost(){
+            this.$router.push("/episode")
         }
     },
     computed: {
@@ -71,5 +96,17 @@ export default {
 </script>
 
 <style scoped>
-
+.collab-history{
+    height:100vh;
+}
+.add-episode{
+    position: absolute;
+    right: 50px;
+    bottom: 50px;
+    border-radius: 50%;
+    background: #007bff;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+}
 </style>

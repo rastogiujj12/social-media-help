@@ -419,7 +419,7 @@ export default {
                         this.$store.dispatch("setIsLoading", { value: false });
                         // console.log("data", data);
                         if (data) {
-                            this.shareUrl = `${window.location.hostname}/?page=${data._id}`;
+                            this.shareUrl = `${window.location.hostname}/episode?page=${data._id}`;
                             this.id = data._id;
                             navigator.clipboard.writeText(this.shareUrl);
                             this.$bvToast.toast(`Page saved and share link copied`, {

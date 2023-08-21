@@ -78,6 +78,7 @@ router.beforeEach(async (to, from, next) => {
   if (
     to.path !== "/login" &&
     to.path !== "/signup" &&
+    to.path !== "/episode" &&
     !auth
   ) {
     // console.log("to path", to.path);
