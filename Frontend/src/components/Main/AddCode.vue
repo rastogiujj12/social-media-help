@@ -417,7 +417,7 @@ export default {
                         posts: JSON.stringify(this.sections),
                     }).then(({ data, error }) => {
                         this.$store.dispatch("setIsLoading", { value: false });
-                        console.log("data", data);
+                        // console.log("data", data);
                         if (data) {
                             this.shareUrl = `${window.location.hostname}/?page=${data._id}`;
                             this.id = data._id;

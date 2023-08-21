@@ -223,7 +223,7 @@ export default {
         setMedia: Function
     },
     mounted(){
-        console.log("post", this.post)
+        // console.log("post", this.post)
         if(!this.post.text && !this.post.image && !this.post.video) 
             this.isNotSaved = true 
 
@@ -259,7 +259,7 @@ export default {
             this.deletePostSelector(this.sectionIndex, this.postIndex)
         },
         uploadMedia(image, video){
-            console.log("facebook upload media called", image, video)
+            // console.log("facebook upload media called", image, video)
             this.setMedia(this.sectionIndex, this.postIndex, image, video)
             this.isEdit = false
         }

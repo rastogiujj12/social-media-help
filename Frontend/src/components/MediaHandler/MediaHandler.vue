@@ -104,7 +104,7 @@ export default {
     },
     methods:{
         init(){
-            console.log("isEdit", this.isEdit, "image", this.image, "video", this.video)
+            // console.log("isEdit", this.isEdit, "image", this.image, "video", this.video)
             if(this.isEdit && (this.image || this.video)){
                 if(this.image) this.uploadImage = this.image
                 else this.uploadVideo = this.video
@@ -137,7 +137,7 @@ export default {
                     const configUpload = {
                         onUploadProgress: function(progressEvent) {
                             let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-                            console.log("percentCompleted", percentCompleted)
+                            // console.log("percentCompleted", percentCompleted)
                             // store.dispatch("setView1Progress", percentCompleted);
                         }
                     }
@@ -145,14 +145,14 @@ export default {
                     Promise.all(
                         [this.axios.put(data.url, this.file, configUpload)]
                     ).then(result=>{
-                        console.log("promise completed")
+                        // console.log("promise completed")
                         this.$store.dispatch('setIsLoading',{value:false})
                         let image = null
                         let video = null
                         if(this.file.type.includes("image")) image = data.url.split("?")[0]
                         else video = data.url.split("?")[0]
 
-                        console.log("media", image, video)
+                        // console.log("media", image, video)
 
                         this.saveUploadedMedia(image, video)
                     })

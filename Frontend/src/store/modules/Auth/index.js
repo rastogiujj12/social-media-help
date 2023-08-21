@@ -67,7 +67,7 @@ const actions = {
         })
     },
 
-    login({ commit, dispatch }, { email, password }) {
+    login({ commit, dispatch }, { email, password, redirect=false }) {
         dispatch('setIsLoading',{value:true})
         AxiosService.post('/login', { email, password }).then(({ token, userData, error }) => {
             dispatch('setIsLoading',{value:false})
@@ -75,13 +75,14 @@ const actions = {
                 //do something
                 localStorage.setItem("Authorization", token);
                 localStorage.setItem("userData", userData);
-                console.log("token", token)
+                // console.log("token", token)
                 commit('setAuth', token)
                 commit('setUser', userData)
                 AxiosService.updateAuthHeaders(token);
 
                 // dispatch("getUser");
-                router.go()
+                if(redirect) router.push("/")
+                else router.go()
                 // dispatch('autoLogin')
             }
             else {
@@ -108,7 +109,7 @@ const actions = {
         return new Promise(async (resolve, reject) => {
             
             let token = localStorage.getItem("Authorization");
-            console.log("called autologin", token)
+            // console.log("called autologin", token)
             AxiosService.updateAuthHeaders(token);
             // let token = chrome.storage.sync.get(['Authorization']);
 

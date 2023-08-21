@@ -94,6 +94,7 @@ export default {
                 this.$store.dispatch("login", {
                     email: this.email,
                     password: this.password,
+                    redirect:true
                 });
                 this.$bvModal.hide("loginModal")
             }

@@ -72,7 +72,7 @@ const router = new VueRouter({
 
 router.beforeEach(async (to, from, next) => {
   let auth = localStorage.getItem("userData");
-  console.log("auth token", auth);
+  // console.log("auth token", auth);
 
   // if (to.path == "/") next({ path: "/dashboard" });
   if (
@@ -87,7 +87,7 @@ router.beforeEach(async (to, from, next) => {
     else next({path:"/login"}) 
   } else if (
     auth &&
-    (to.path === "/login" || to.path === "/signup")
+    (to.path == "/login" || to.path == "/signup")
   ) {
     next({ path: "/" });
   } else next();

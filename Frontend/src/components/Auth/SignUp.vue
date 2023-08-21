@@ -107,11 +107,11 @@ export default {
       onSubmit(event) {
         event.preventDefault()
           // this.$router.push('/dashboard')
-          console.log("on submit")
+          // console.log("on submit")
           if (this.firstName && this.lastName && this.email && this.password && this.password2) {
-            console.log("all values found")
+            // console.log("all values found")
               if(this.password!=this.password2){
-                console.log("password same as password 2")
+                // console.log("password same as password 2")
                 this.$bvToast.toast(`Password do not match, please try again`, {
                     autoHideDelay: 5000,
                     solid: true,

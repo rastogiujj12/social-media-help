@@ -48,7 +48,7 @@ const actions = {
         // console.log("create video", payload)
         return new Promise(async (resolve, reject)=>{
             AxiosService.post('/getUploadUrl', payload).then((data)=>{
-                console.log("data", data)
+                // console.log("data", data)
                 dispatch('setIsLoading', {value:false})
                 if(data.url){
                    commit("setUploadUrl", data.url);

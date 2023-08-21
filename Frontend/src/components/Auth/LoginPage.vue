@@ -70,9 +70,9 @@ export default {
       onSubmit(event) {
         event.preventDefault()
           // this.$router.push('/dashboard')
-          console.log("on submit")
+          // console.log("on submit")
           if (this.email && this.password) {
-            console.log("all values found")
+            // console.log("all values found")
               this.$store.dispatch("login", {
                   email: this.email,
                   password: this.password,

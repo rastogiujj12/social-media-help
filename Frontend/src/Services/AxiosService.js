@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-console.log("axios service", this)
+// console.log("axios service", this)
 
 
 // const endpoint = "192.168.1.54:3000"
@@ -11,9 +11,9 @@ let headers = {
     Authorization:''
 }
 const updateAuthHeaders = (token)=>{ // User better way to load this (from localStorage)
-    console.log("here?", token)
+    // console.log("here?", token)
     headers.Authorization = `${token}`;
-    console.log("header updated", headers);
+    // console.log("header updated", headers);
 }
 
 const post = (url, req)=>{
@@ -44,7 +44,7 @@ const get = (url)=>{
 }
 
 const upload = (url, file)=> {
-    console.log("video upload");
+    // console.log("video upload");
     // console.log("axios url", url);
 
     const config = {
