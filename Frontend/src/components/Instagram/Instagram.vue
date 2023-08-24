@@ -243,14 +243,6 @@ export default {
             });
         },
         downloadURI(uri) {
-            const isIosUser = ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod'].includes(navigator.platform);
-            // console.log("isiosUser", isIosUser)
-            if(isIosUser){
-                console.log("ios user")
-                window.location.replace(uri, '_blank');
-                return;
-            }
-            console.log("non ios user")
             let link = document.createElement("a");
             link.download = uri.split("/").pop();
             link.href = uri;

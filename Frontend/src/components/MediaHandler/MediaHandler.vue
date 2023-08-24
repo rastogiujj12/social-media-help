@@ -133,8 +133,10 @@ export default {
             AxiosService.post('/getUploadUrl', {name:this.file.name}).then((data)=>{
                 // console.log("data", data)
                 if(data.url){
-                    // console.log("url", data.url)
                     const configUpload = {
+                        headers: {
+                            "content-disposition":`attachment; filename="${this.file.name}"`
+                        },
                         onUploadProgress: function(progressEvent) {
                             let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
                             console.log("percentCompleted", percentCompleted)

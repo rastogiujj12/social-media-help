@@ -21,8 +21,10 @@ const getPreSignedUrl = async (key) =>{
             Bucket: bucket,
             Key: `${key}-${Date.now()}`,
             Expires: 60 * 60,
-            ResponseContentDisposition: `inline; filename="${key}"`
         });
+
+        // ResponseContentDisposition: 'attachment; filename ="' + key + '"' 
+
         // console.log("url", url)
         // url = url.replace(/%2F/g, "/")
         // console.log("url",url);

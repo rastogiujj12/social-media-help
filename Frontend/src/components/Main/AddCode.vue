@@ -525,7 +525,7 @@ export default {
             })
         },
         setMedia(section, index, image, video){
-            console.log("set media", this.sections[section].posts[index], image, video)
+            // console.log("set media", this.sections[section].posts[index], image, video)
             let temp = {
                 text: this.sections[section].posts[index].text,
                 image, 
