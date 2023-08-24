@@ -65,7 +65,7 @@ const getEpisodes = async(req, res) =>{
 
     console.log("get Episodes")
 
-    let epiosdeList = await Page.find({author:req.user.id}, {title:1, createdAt:1}).lean();
+    let epiosdeList = await Page.find({author:req.user.id}, {title:1, createdAt:1}).sort({createdAt:-1}).lean();
     console.log("episodeList", epiosdeList)
     res.send({data:epiosdeList});
 }

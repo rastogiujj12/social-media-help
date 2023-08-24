@@ -6,6 +6,9 @@
             :items="items"
             :fields="fields"
         >
+            <template v-slot:cell(createdAt)="row">
+                {{moment(row.value).format("LL")}}
+            </template> 
             <template v-slot:cell(_id)="row">
                 <a class="btn btn-primary" :href="`/episode?page=${row.value}`" target="_blank"> Open Episode</a>
             </template> 
@@ -100,7 +103,7 @@ export default {
     height:100vh;
 }
 .add-episode{
-    position: absolute;
+    position: fixed;
     right: 50px;
     bottom: 50px;
     border-radius: 50%;
@@ -108,5 +111,10 @@ export default {
     color: white;
     padding: 10px;
     cursor: pointer;
+}
+h3{
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid black;
 }
 </style>

@@ -243,10 +243,18 @@ export default {
             });
         },
         downloadURI(uri) {
-            this.$store.dispatch('setIsLoading',{value:true})
-            setTimeout(()=>this.$store.dispatch('setIsLoading',{value:false}), 2000)
-                let fileName = uri.split("/").pop()
-            saveAs(uri, fileName)
+            const isIosUser = ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod'].includes(navigator.platform);
+            // console.log("isiosUser", isIosUser)
+            if(isIosUser){
+                console.log("ios user")
+                window.location.replace(uri, '_blank');
+                return;
+            }
+            console.log("non ios user")
+            let link = document.createElement("a");
+            link.download = uri.split("/").pop();
+            link.href = uri;
+            link.click();
         },
         editPost(){
             // this.editPostSelector(this.sectionIndex, this.postIndex)
