@@ -148,6 +148,7 @@ import {
 // import { saveAs } from "file-saver";
 import AxiosService from '../../Services/AxiosService';
 import MediaHandler from "../MediaHandler/MediaHandler.vue"
+import constants from "../../Constants/values.json"
 
 export default {
     components: {
@@ -208,9 +209,27 @@ export default {
             });
         },
         downloadURI(uri) {
+            
+            //https://collabroflow-media.s3.us-west-1.amazonaws.com/Zen+Habits+-+Kaira+Jewel+Short+1a.mp4
+            // turn this into 
+            // cloudfrontUrl
+            // https://${cloudfrontUrl}/Zen+Habits+-+Kaira+Jewel+Short+1a.mp4
+
+
+            let newUri = new URL(uri)
+            newUri.hostname = constants.cloudfrontUrl;
+
+            //add download=1 as query string
+            newUri.searchParams.set("download", 1);
+           
+            //convert URL object to string
+            newUri = newUri.href;
+
+            console.log("newUri", newUri)
+
             let link = document.createElement("a");
-            link.download = uri.split("/").pop();
-            link.href = uri;
+            link.download = newUri.split("/").pop();
+            link.href = newUri;
             link.click();
         },
         editPost() {
@@ -260,28 +279,6 @@ export default {
         //     })
         // },
        
-    },
-    computed:{
-        url(){
-            return this.$store.uploadUrl || null
-        }
-    },
-    watch:{
-        url(newVal){
-            // console.log(">", newVal)
-            if(!newVal)
-                return;
-
-            const configUpload = {
-                onUploadProgress: function(progressEvent) {
-                    let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-                    // console.log("percentCompleted", percentCompleted)
-                    // store.dispatch("setView1Progress", percentCompleted);
-                }
-            }
-            // this.axios.put(newVal, this.file, configUpload)
-
-        }
     }
 };
 </script>
