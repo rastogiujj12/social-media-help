@@ -191,6 +191,7 @@ import {
     BFormTextarea
 } from "bootstrap-vue";
 import MediaHandler from "../MediaHandler/MediaHandler.vue"
+import constants from "../../Constants/values.json" 
 
 export default {
     components: {
@@ -243,6 +244,23 @@ export default {
             });
         },
         downloadURI(uri) {
+            //https://collabroflow-media.s3.us-west-1.amazonaws.com/Zen+Habits+-+Kaira+Jewel+Short+1a.mp4
+            // turn this into 
+            // cloudfrontUrl
+            // https://${cloudfrontUrl}/Zen+Habits+-+Kaira+Jewel+Short+1a.mp4
+
+
+            // let newUri = new URL(uri)
+            // newUri.hostname = constants.cloudfrontUrl;
+
+            // //add download=1 as query string
+            // newUri.searchParams.set("download", 1);
+           
+            // //convert URL object to string
+            // newUri = newUri.href;
+
+            // console.log("newUri", newUri)
+
             let link = document.createElement("a");
             link.download = uri.split("/").pop();
             link.href = uri;

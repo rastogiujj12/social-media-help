@@ -123,6 +123,14 @@ export default {
             this.uploadVideo = null
             this.saveUploadedMedia(null, null)
         },
+        setContentType(extention) {
+            if (extention === 'jpg' || extention === 'jpeg' || extention === 'png') {
+                return 'image/jpeg';
+            } else if (extention === 'mp4'||extention=="mkv") {
+                return 'video/mp4';
+            }
+        },
+
         async uploadMedia(){
             this.$store.dispatch('setIsLoading',{value:true})
             // console.log("file", this.file)
@@ -135,8 +143,14 @@ export default {
                 if(data.url){
                     // headers: {
                     //         "content-disposition":`attachment; filename="${this.file.name}"`
+                    //         "content-type":`${this.setContentType(this.file.name.split(".").pop().toLowerCase())}`
                     //     },
                     const configUpload = {
+                        headers: {
+                            "content-disposition":`attachment; filename="${this.file.name}"`,
+                            "content-length":this.file.length,
+                            "content-type":this.setContentType(this.file.name.split(".").pop().toLowerCase())
+                        },
                         onUploadProgress: function(progressEvent) {
                             let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
                             console.log("percentCompleted", percentCompleted)

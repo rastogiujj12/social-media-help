@@ -19,8 +19,8 @@ const getPreSignedUrl = async (key) =>{
     return new Promise( async(resolve, reject)=>{
         let url = await s3.getSignedUrl('putObject', {
             Bucket: bucket,
-            Key: `${key}-collabkey-${Date.now()}`,
-            Expires: 60 * 60,
+            Key: `${key.substring(0,key.lastIndexOf('.'))}-collabkey-${Date.now()}.${key.split(".").pop()}`,
+            Expires: 60 * 60
         });
 
         // ResponseContentDisposition: 'attachment; filename ="' + key + '"' 
