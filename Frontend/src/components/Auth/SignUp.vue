@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div class="signup">
-      <h2>Collabroflow</h2>
+      <h2>Collabcaddy</h2>
       <b-form id="signup-form" @submit="onSubmit">
         <b-form-group
             label="Name"

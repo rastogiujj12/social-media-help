@@ -11,8 +11,8 @@ var handlebars = require('express-handlebars');
 // and documentation.
 
 app.init({
-	'name': 'collabroflow',
-	'brand': 'collabroflow',
+	'name': 'collabcaddy',
+	'brand': 'collabcaddy',
 
 	'less': 'public',
 	'static': 'public',

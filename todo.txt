@@ -1,4 +1,2 @@
-12:30 - 3:41
-1:50 - 
-
-//TODO delete cloudfront and only use s3
+2 hrs
+10:50 - 
