@@ -8,7 +8,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    name: 'Collabroflow',
+    name: 'Collabcaddy',
   },
 
   modules: {
